@@ -15,7 +15,7 @@ public class DefaultWordFrequencyAnalyzer implements WordFrequencyAnalyzer {
 
     @Override
     public int calculateHighestFrequency(String text) {
-        return wordFrequencyStream(text).max(WordFrequencyRecord.byFrequency())
+        return wordFrequencyStream(text).min(WordFrequencyRecord.byFrequencyDesc())
                 .map(WordFrequency::getFrequency)
                 .orElse(0);
     }
@@ -34,7 +34,7 @@ public class DefaultWordFrequencyAnalyzer implements WordFrequencyAnalyzer {
         if (n < 1) {
             return List.of();
         }
-        return wordFrequencyStream(text).sorted(WordFrequencyRecord.byFrequency().reversed()).limit(n).toList();
+        return wordFrequencyStream(text).sorted(WordFrequencyRecord.byFrequencyDesc()).limit(n).toList();
     }
 
     private static Stream<WordFrequency> wordFrequencyStream(String text) {
@@ -42,9 +42,9 @@ public class DefaultWordFrequencyAnalyzer implements WordFrequencyAnalyzer {
     }
 
     private static Stream<WordFrequency> wordFrequencyStream(Map<String, Long> wordFrequencies) {
-        return wordFrequencies.entrySet()
-                .stream()
-                .map(e -> new WordFrequencyRecord(e.getKey(), e.getValue().intValue()));
+        return wordFrequencies.entrySet().stream().map(e -> new WordFrequencyRecord(
+                e.getKey(),
+                e.getValue().intValue()));
     }
 
     private static Map<String, Long> countWordFrequencies(String text) {
@@ -57,7 +57,7 @@ public class DefaultWordFrequencyAnalyzer implements WordFrequencyAnalyzer {
                : Stream.of(WORD_PATTERN.split(text)).filter(Predicate.not(String::isBlank)).map(String::toLowerCase);
     }
 
-    record WordFrequencyRecord(String word, int frequency) implements WordFrequency {
+    public record WordFrequencyRecord(String word, int frequency) implements WordFrequency {
         @Override
         public String getWord() {
             return word();
@@ -68,8 +68,8 @@ public class DefaultWordFrequencyAnalyzer implements WordFrequencyAnalyzer {
             return frequency();
         }
 
-        public static Comparator<WordFrequency> byFrequency() {
-            return Comparator.comparing(WordFrequency::getFrequency).thenComparing(WordFrequency::getWord);
+        public static Comparator<WordFrequency> byFrequencyDesc() {
+            return Comparator.comparing(WordFrequency::getFrequency).reversed().thenComparing(WordFrequency::getWord);
         }
     }
 }

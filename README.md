@@ -59,3 +59,10 @@ Implement test cases for this class. You may use 3rd party frameworks to support
 
 As a final note, please follow the instructions (which are not complicated) and perform the tasks on an
 industry-standard level.
+
+## Notes
+
+Not all enterprise-level functionality is implemented.
+
+- No size checking or validation on request parameters and body, this can lead to DoS vulnerabilty.
+- There is no caching or other means of reusing the analyzed text for other queries.
