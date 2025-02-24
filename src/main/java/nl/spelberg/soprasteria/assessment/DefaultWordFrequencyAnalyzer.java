@@ -22,7 +22,11 @@ public class DefaultWordFrequencyAnalyzer implements WordFrequencyAnalyzer {
 
     @Override
     public int calculateFrequencyForWord(String text, String word) {
-        return 0;
+        if (text == null || word == null) {
+            return 0;
+        }
+        String wordLowerCase = word.toLowerCase();
+        return Math.toIntExact(wordStream(text).filter(w -> w.equals(wordLowerCase)).count());
     }
 
     @Override
@@ -41,10 +45,13 @@ public class DefaultWordFrequencyAnalyzer implements WordFrequencyAnalyzer {
     }
 
     private static Map<String, Long> countWordFrequencies(String text) {
-        return Stream.of(WORD_PATTERN.split(text))
-                .filter(Predicate.not(String::isBlank))
-                .map(String::toLowerCase)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        return wordStream(text).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    }
+
+    private static Stream<String> wordStream(String text) {
+        return text == null
+               ? Stream.empty()
+               : Stream.of(WORD_PATTERN.split(text)).filter(Predicate.not(String::isBlank)).map(String::toLowerCase);
     }
 
     record WordFrequencyRecord(String word, int frequency) implements WordFrequency {
@@ -60,10 +67,6 @@ public class DefaultWordFrequencyAnalyzer implements WordFrequencyAnalyzer {
 
         public static Comparator<WordFrequency> byFrequency() {
             return Comparator.comparing(WordFrequency::getFrequency).thenComparing(WordFrequency::getWord);
-        }
-
-        public static Comparator<WordFrequency> byWord() {
-            return Comparator.comparing(WordFrequency::getWord);
         }
     }
 }
