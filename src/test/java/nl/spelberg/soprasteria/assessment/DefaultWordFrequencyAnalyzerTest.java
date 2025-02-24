@@ -117,17 +117,13 @@ class DefaultWordFrequencyAnalyzerTest {
 
         List<WordFrequency> result = analyzer.calculateMostFrequentNWords(text, 5);
 
-        List<WordFrequency> expected = List.of(
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("een", 15),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("is", 5),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("maar", 4),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("ik", 4),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("appel", 4)
-        );
+        List<WordFrequency> expected = List.of(new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("een", 41),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("ik", 12),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("of", 10),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("is", 9),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("appel", 9));
 
-        assertThat(result)
-            .hasSize(5)
-            .containsExactlyElementsOf(expected);
+        assertThat(result).hasSize(5).containsExactlyElementsOf(expected);
     }
 
     @Test
@@ -136,15 +132,11 @@ class DefaultWordFrequencyAnalyzerTest {
 
         List<WordFrequency> result = analyzer.calculateMostFrequentNWords(text, 3);
 
-        List<WordFrequency> expected = List.of(
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("een", 15),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("is", 5),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("maar", 4)
-        );
+        List<WordFrequency> expected = List.of(new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("een", 41),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("ik", 12),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("of", 10));
 
-        assertThat(result)
-            .hasSize(3)
-            .containsExactlyElementsOf(expected);
+        assertThat(result).hasSize(3).containsExactlyElementsOf(expected);
     }
 
     @Test
@@ -153,13 +145,9 @@ class DefaultWordFrequencyAnalyzerTest {
 
         List<WordFrequency> result = analyzer.calculateMostFrequentNWords(text, 1);
 
-        List<WordFrequency> expected = List.of(
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("een", 15)
-        );
+        List<WordFrequency> expected = List.of(new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("een", 41));
 
-        assertThat(result)
-            .hasSize(1)
-            .containsExactlyElementsOf(expected);
+        assertThat(result).hasSize(1).containsExactlyElementsOf(expected);
     }
 
     @Test
@@ -168,22 +156,18 @@ class DefaultWordFrequencyAnalyzerTest {
 
         List<WordFrequency> result = analyzer.calculateMostFrequentNWords(text, 10);
 
-        List<WordFrequency> expected = List.of(
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("een", 15),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("is", 5),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("maar", 4),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("ik", 4),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("appel", 4),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("het", 3),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("de", 3),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("en", 3),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("in", 2),
-            new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("van", 2)
-        );
+        List<WordFrequency> expected = List.of(new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("een", 41),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("ik", 12),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("of", 10),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("is", 9),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("appel", 9),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("mango", 8),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("kers", 8),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("banaan", 8),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("maar", 7),
+                                               new DefaultWordFrequencyAnalyzer.WordFrequencyRecord("druif", 7));
 
-        assertThat(result)
-            .hasSize(10)
-            .containsExactlyElementsOf(expected);
+        assertThat(result).hasSize(10).containsExactlyElementsOf(expected);
     }
 
     @Test
