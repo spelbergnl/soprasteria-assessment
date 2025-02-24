@@ -31,7 +31,10 @@ public class DefaultWordFrequencyAnalyzer implements WordFrequencyAnalyzer {
 
     @Override
     public List<WordFrequency> calculateMostFrequentNWords(String text, int n) {
-        return List.of();
+        if (n < 1) {
+            return List.of();
+        }
+        return wordFrequencyStream(text).sorted(WordFrequencyRecord.byFrequency().reversed()).limit(n).toList();
     }
 
     private static Stream<WordFrequency> wordFrequencyStream(String text) {
@@ -49,7 +52,7 @@ public class DefaultWordFrequencyAnalyzer implements WordFrequencyAnalyzer {
     }
 
     private static Stream<String> wordStream(String text) {
-        return text == null
+        return text == null || text.isBlank()
                ? Stream.empty()
                : Stream.of(WORD_PATTERN.split(text)).filter(Predicate.not(String::isBlank)).map(String::toLowerCase);
     }
