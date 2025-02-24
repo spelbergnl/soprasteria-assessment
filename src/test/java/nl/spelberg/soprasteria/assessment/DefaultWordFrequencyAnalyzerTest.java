@@ -10,7 +10,7 @@ import static org.assertj.core.api.Fail.fail;
 
 class DefaultWordFrequencyAnalyzerTest {
 
-    private WordFrequencyAnalyzer analyzer;
+    private DefaultWordFrequencyAnalyzer analyzer;
 
     @BeforeEach
     void setUp() {
@@ -18,16 +18,14 @@ class DefaultWordFrequencyAnalyzerTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
-            ",0",
+    @CsvSource({"'',0",
             "Hi,1",
             "Hi There,1",
             "Hi Hi There,2",
             "Hi There There,2",
             "Hi Hi There There,2",
             "Hi There Hi There,2",
-            "Hi There How are you? You are you is it not?,3"
-    })
+            "Hi There How are you? You are you is it not?,3"})
     void calculateHighestFrequency(String text, int expected) {
         assertThat(analyzer.calculateHighestFrequency(text)).isEqualTo(expected);
     }
