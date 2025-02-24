@@ -1,9 +1,9 @@
 package nl.spelberg.soprasteria.assessment;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -15,12 +15,9 @@ public class DefaultWordFrequencyAnalyzer implements WordFrequencyAnalyzer {
 
     @Override
     public int calculateHighestFrequency(String text) {
-        return countWordFrequencies(text).entrySet()
-                .stream()
-                .max(Entry.<String, Long>comparingByValue().thenComparing(Entry.comparingByKey()))
-                .map(Entry::getValue)
-                .orElse(0L)
-                .intValue();
+        return wordFrequencyStream(text).max(WordFrequencyRecord.byFrequency())
+                .map(WordFrequency::getFrequency)
+                .orElse(0);
     }
 
     @Override
@@ -33,10 +30,40 @@ public class DefaultWordFrequencyAnalyzer implements WordFrequencyAnalyzer {
         return List.of();
     }
 
-    private static SortedMap<String, Long> countWordFrequencies(String text) {
+    private static Stream<WordFrequency> wordFrequencyStream(String text) {
+        return wordFrequencyStream(countWordFrequencies(text));
+    }
+
+    private static Stream<WordFrequency> wordFrequencyStream(Map<String, Long> wordFrequencies) {
+        return wordFrequencies.entrySet()
+                .stream()
+                .map(e -> new WordFrequencyRecord(e.getKey(), e.getValue().intValue()));
+    }
+
+    private static Map<String, Long> countWordFrequencies(String text) {
         return Stream.of(WORD_PATTERN.split(text))
                 .filter(Predicate.not(String::isBlank))
                 .map(String::toLowerCase)
-                .collect(Collectors.groupingBy(w -> w, TreeMap::new, Collectors.counting()));
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    }
+
+    record WordFrequencyRecord(String word, int frequency) implements WordFrequency {
+        @Override
+        public String getWord() {
+            return word();
+        }
+
+        @Override
+        public int getFrequency() {
+            return frequency();
+        }
+
+        public static Comparator<WordFrequency> byFrequency() {
+            return Comparator.comparing(WordFrequency::getFrequency).thenComparing(WordFrequency::getWord);
+        }
+
+        public static Comparator<WordFrequency> byWord() {
+            return Comparator.comparing(WordFrequency::getWord);
+        }
     }
 }
